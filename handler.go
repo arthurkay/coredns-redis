@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"time"
 
+	"context"
+
 	"github.com/coredns/coredns/plugin"
 	"github.com/coredns/coredns/request"
 	"github.com/miekg/dns"
-	"context"
 )
 
 // ServeDNS implements the plugin.Handler interface.
@@ -22,7 +23,7 @@ func (redis *Redis) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.M
 	}
 
 	zone := plugin.Zones(redis.Zones).Matches(qname)
-	
+
 	if zone == "" {
 		return plugin.NextOrFailure(qname, redis.Next, ctx, w, r)
 	}
