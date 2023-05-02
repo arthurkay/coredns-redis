@@ -1,11 +1,12 @@
 package redis
 
 import (
+	"strconv"
+	"time"
+
 	"github.com/coredns/caddy"
 	"github.com/coredns/coredns/core/dnsserver"
 	"github.com/coredns/coredns/plugin"
-	"strconv"
-	"time"
 )
 
 // Register the plugin
@@ -14,14 +15,14 @@ func init() {
 }
 
 func redisParse(c *caddy.Controller) (*Redis, error) {
-	redis := Redis {
-		keyPrefix:"",
-		keySuffix:"",
-		Ttl:300,
-		zoneUpdateTime: 10*time.Minute,
+	redis := Redis{
+		keyPrefix:      "",
+		keySuffix:      "",
+		Ttl:            300,
+		zoneUpdateTime: 10 * time.Minute,
 	}
 	var (
-		err            error
+		err error
 	)
 
 	for c.Next() {
@@ -62,7 +63,7 @@ func redisParse(c *caddy.Controller) (*Redis, error) {
 					}
 					redis.readTimeout, err = strconv.Atoi(c.Val())
 					if err != nil {
-						redis.readTimeout = 0;
+						redis.readTimeout = 0
 					}
 				case "zone_update_time":
 					if !c.NextArg() {
@@ -70,7 +71,7 @@ func redisParse(c *caddy.Controller) (*Redis, error) {
 					}
 					zoneUpdateTime, err := strconv.Atoi(c.Val())
 					if err != nil {
-						redis.zoneUpdateTime = 10 * time.Minute;
+						redis.zoneUpdateTime = 10 * time.Minute
 					}
 					redis.zoneUpdateTime = time.Duration(zoneUpdateTime) * time.Second
 				case "ttl":
